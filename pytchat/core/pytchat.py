@@ -91,6 +91,8 @@ class PytchatCore:
         self._last_offset_ms = 0
         self._logger = logger
         self.continuation = replay_continuation
+        # self.do_once = 0
+        # self.out_put = open("chat_vcarql0XEKA.json", "w", encoding="utf-8")
         if interruptable:
             signal.signal(signal.SIGINT, lambda a, b: self.terminate())
         self._setup()
@@ -190,6 +192,15 @@ class PytchatCore:
             self._logger.error(f"[{self._video_id}]"
                                f"Exceeded retry count. Last error: {str(err)}")
             self._raise_exception(exceptions.RetryExceedMaxCount())
+
+        # ##Extract json data
+        # json_dump = json.dumps(livechat_json, indent=0)
+        # print('"frame' + str(self.do_once) + '":',json_dump, file=self.out_put)
+        # self.do_once += 1
+        # if self.do_once % 100 == 0:
+        #     print("flushing frame" + str(self.do_once))
+        #     self.out_put.flush()
+
         return livechat_json
 
     def get(self):

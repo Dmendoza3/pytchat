@@ -41,8 +41,12 @@ class BaseRenderer:
         )
         self.chat.author.channelId = self.item.get("authorExternalChannelId")
         self.chat.author.channelUrl = "http://www.youtube.com/channel/" + self.chat.author.channelId
-        self.chat.author.name = self.item["authorName"]["simpleText"]
-        self.chat.author.imageUrl = self.item["authorPhoto"]["thumbnails"][1]["url"]
+        try:
+            self.chat.author.name = self.item["authorName"]["simpleText"]#self.item.get("authorName", self.item["header"]["liveChatSponsorshipsHeaderRenderer"]["authorName"])["simpleText"]
+            self.chat.author.imageUrl = self.item["authorPhoto"]["thumbnails"][1]["url"]#self.item.get("authorPhoto", self.item["header"]["liveChatSponsorshipsHeaderRenderer"]["authorPhoto"])["thumbnails"][1]["url"]
+        except:
+            self.chat.author.name = self.item["header"]["liveChatSponsorshipsHeaderRenderer"]["authorName"]["simpleText"]
+            self.chat.author.imageUrl = self.item["header"]["liveChatSponsorshipsHeaderRenderer"]["authorPhoto"]["thumbnails"][1]["url"]
 
     def get_message(self, item):
         message = ''
@@ -70,6 +74,9 @@ class BaseRenderer:
         isChatSponsor = False
         isChatModerator = False
         badges = renderer.get("authorBadges", {})
+        if not badges:
+            badges = renderer.get("header", {}).get("liveChatSponsorshipsHeaderRenderer", {}).get("authorBadges", {})
+
         for badge in badges:
             if badge["liveChatAuthorBadgeRenderer"].get("icon"):
                 author_type = badge["liveChatAuthorBadgeRenderer"]["icon"]["iconType"]

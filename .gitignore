@@ -37,3 +37,5 @@ temporary/
 # Pypi wheel
 build/
 exclude/
+*.csv
+/samples

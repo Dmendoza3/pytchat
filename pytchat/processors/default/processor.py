@@ -8,6 +8,8 @@ from .renderer.paidsticker import LiveChatPaidStickerRenderer
 from .renderer.legacypaid import LiveChatLegacyPaidMessageRenderer
 from .renderer.membership import LiveChatMembershipItemRenderer
 from .renderer.donation import LiveChatDonationAnnouncementRenderer
+from .renderer.sponsor_gift import LiveChatSponsorshipsGiftPurchaseAnnouncementRenderer
+from .renderer.sponsor_gift_redemption import LiveChatSponsorshipsGiftRedemptionAnnouncementRenderer
 from .. chat_processor import ChatProcessor
 from ... import config
 
@@ -124,9 +126,11 @@ class DefaultProcessor(ChatProcessor):
             "liveChatTextMessageRenderer": LiveChatTextMessageRenderer(),
             "liveChatPaidMessageRenderer": LiveChatPaidMessageRenderer(),
             "liveChatPaidStickerRenderer": LiveChatPaidStickerRenderer(),
-            "liveChatLegacyPaidMessageRenderer": LiveChatLegacyPaidMessageRenderer(),
-            "liveChatMembershipItemRenderer": LiveChatMembershipItemRenderer(),
-            "liveChatDonationAnnouncementRenderer": LiveChatDonationAnnouncementRenderer(),
+            "liveChatMembershipItemRenderer": LiveChatMembershipItemRenderer(), 
+            "liveChatSponsorshipsGiftPurchaseAnnouncementRenderer": LiveChatSponsorshipsGiftPurchaseAnnouncementRenderer(), 
+            "liveChatSponsorshipsGiftRedemptionAnnouncementRenderer": LiveChatSponsorshipsGiftRedemptionAnnouncementRenderer(), 
+            "liveChatLegacyPaidMessageRenderer": LiveChatLegacyPaidMessageRenderer(), #not used anymore
+            "liveChatDonationAnnouncementRenderer": LiveChatDonationAnnouncementRenderer(), #not used anymore
         }
 
     def process(self, chat_components: list):
@@ -175,6 +179,8 @@ class DefaultProcessor(ChatProcessor):
             rendered_chatobj = renderer.get_chatobj()
             renderer.clear()
         except (KeyError, TypeError) as e:
+            #print(f"{str(type(e))}-{str(e)} item:{str(item)}")
+            #print(item)
             logger.error(f"{str(type(e))}-{str(e)} item:{str(item)}")
             return None
         
